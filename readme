@@ -1,1 +1,16 @@
-
+Go Version : go1.17.5 
+requirements :
+gomod
+How to use :
+1. Clone repository
+2. install package relate -> go mod vendor
+3. create .env file on root directory project :
+    APP_SECRET_KEY=secret
+    DB_CONNECTION=mysql
+    DB_HOST=localhost
+    DB_PORT=3306
+    DB_DATABASE=yourdatabasename
+    DB_USERNAME=youruser
+    DB_PASSWORD=youtpassword
+    DB_CHARSET=utf8mb4
+5. run the app -> go run main.go
