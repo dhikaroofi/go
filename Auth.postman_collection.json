@@ -81,13 +81,13 @@
 					}
 				],
 				"url": {
-					"raw": "{{url}}/report/merchant/:id/omzet?page=0&limit=1",
+					"raw": "{{url}}/report/outlet/:id/omzet?page=0&limit=1",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"report",
-						"merchant",
+						"outlet",
 						":id",
 						"omzet"
 					],
@@ -110,6 +110,76 @@
 						{
 							"key": "id",
 							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get merchants",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJ1c2VyX2lkIjoxLCJ1c2VyX25hbWUiOiJhZG1pbjEifQ.Xb2So0_DxVXhisvpTdVYyXvKlE4oqaVpEoXvDq7b3-A",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/merchant/list",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"merchant",
+						"list"
+					],
+					"query": [
+						{
+							"key": ":id",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get outlets",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJ1c2VyX2lkIjoxLCJ1c2VyX25hbWUiOiJhZG1pbjEifQ.Xb2So0_DxVXhisvpTdVYyXvKlE4oqaVpEoXvDq7b3-A",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/merchant/:id/outlet/list",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"merchant",
+						":id",
+						"outlet",
+						"list"
+					],
+					"query": [
+						{
+							"key": ":id",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "2"
 						}
 					]
 				}
