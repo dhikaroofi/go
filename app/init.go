@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/mux"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"log"
 	"net/http"
 	"time"
@@ -19,6 +20,7 @@ type Mojoo struct {
 func (a *Mojoo) Initialize(route *mux.Router) {
 	config := initConfig()
 	db, err := gorm.Open(mysql.Open(config.getDSN()), &gorm.Config{
+		Logger:                 logger.Default.LogMode(logger.Info),
 		PrepareStmt:            true,
 		SkipDefaultTransaction: true,
 	})

@@ -29,7 +29,7 @@ type responseReport struct {
 	MerchantName string    `json:"merchant_name,omitempty"`
 	OutletName   string    `json:"outlet_name,omitempty"`
 	Omzet        float64   `json:"omzet"`
-	Date         time.Time `json:"date,omitempty"`
+	Date         time.Time `json:"date,omitempty" gorm:"column:date"`
 }
 
 func (baseService) DecodeJson(r *http.Request, payload interface{}) error {

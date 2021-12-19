@@ -11,6 +11,8 @@ import (
 type ReportMerchantService struct {
 	Request struct {
 		Parameter struct {
+			StartDate  string
+			EndDate    string
 			Limit      int
 			Page       int
 			Offset     int
@@ -50,6 +52,18 @@ func (service *ReportMerchantService) getQueryParameter() {
 			service.Request.Parameter.Page = page
 		}
 	}
+	keys, ok = service.r.URL.Query()["start_date"]
+	if ok {
+		service.Request.Parameter.StartDate = keys[0]
+	} else {
+		service.Request.Parameter.StartDate = "2021-11-01"
+	}
+	keys, ok = service.r.URL.Query()["end_date"]
+	if ok {
+		service.Request.Parameter.EndDate = keys[0]
+	} else {
+		service.Request.Parameter.EndDate = "2021-11-30"
+	}
 
 	service.Request.Parameter.Offset = service.Request.Parameter.Limit * service.Request.Parameter.Page
 }
@@ -59,13 +73,38 @@ func (service *ReportMerchantService) GetDailyOmzet(merchantID int64) (interface
 		return nil, err
 	}
 	var model []responseReport
-	execute := service.db.Raw("SELECT "+
-		"sum(trx.bill_total) 'omzet', "+
-		"mct.merchant_name 'merchant_name', "+
-		"DATE(trx.created_at) 'date' "+
-		"FROM Transactions trx "+
-		"INNER JOIN Merchants mct on mct.id=trx.merchant_id "+
-		"WHERE trx.merchant_id = ? GROUP BY date  ORDER BY date  LIMIT ? OFFSET ? ", merchantID, service.Request.Parameter.Limit, service.Request.Parameter.Offset).Scan(&model)
+	startDate := string(service.Request.Parameter.StartDate[0:8])
+	sql := " SELECT DATE(calender.date) 'date',trx.omzet,trx.merchant_name  " +
+		" FROM ( " +
+		"    SELECT " +
+		"        FROM_UNIXTIME(UNIX_TIMESTAMP(CONCAT(?,n)),'%Y-%m-%d') as date  " +
+		"    FROM ( " +
+		"            SELECT (((b4.0 << 1 | b3.0) << 1 | b2.0) << 1 | b1.0) << 1 | b0.0 as n " +
+		"                    FROM  (SELECT 0 union all SELECT 1) as b0," +
+		"                        (SELECT 0 union all SELECT 1) as b1," +
+		"                        (SELECT 0 union all SELECT 1) as b2," +
+		"                        (SELECT 0 union all SELECT 1) as b3," +
+		"                        (SELECT 0 union all SELECT 1) as b4 ) t" +
+		"            where n > 0 and n <= day(last_day(?)) ORDER BY date) calender" +
+		" LEFT JOIN (" +
+		"    SELECT " +
+		"        SUM(trx.bill_total) 'omzet', " +
+		"        mct.merchant_name 'merchant_name'," +
+		"        DATE(trx.created_at) 'date' " +
+		"    FROM Transactions trx " +
+		"    INNER JOIN " +
+		"        Merchants mct on mct.id=trx.merchant_id " +
+		"    WHERE trx.merchant_id = ? AND trx.created_at " +
+		"    BETWEEN ? AND ? GROUP BY date ORDER BY date) trx " +
+		" ON calender.date=trx.date ORDER BY calender.date"
+
+	execute := service.db.Raw(sql+" LIMIT ? OFFSET ? ", startDate,
+		service.Request.Parameter.EndDate,
+		merchantID,
+		service.Request.Parameter.StartDate,
+		service.Request.Parameter.EndDate,
+		service.Request.Parameter.Limit,
+		service.Request.Parameter.Offset).Scan(&model)
 	if execute.Error != nil {
 		return nil, execute.Error
 	}
