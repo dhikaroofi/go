@@ -11,14 +11,14 @@ import (
 type MerchantService struct {
 	Request struct {
 		Parameter struct {
-			Limit      int
-			Page       int
-			Offset     int
-			MerchantID int64
+			Limit      int   `json:"limit,omitempty"`
+			Page       int   `json:"page,omitempty"`
+			Offset     int   `json:"offset,omitempty"`
+			MerchantID int64 `json:"merchant_id,omitempty"`
 		}
 	}
 	Response struct {
-		responseReport
+		pagination
 	}
 	baseService
 }
@@ -60,7 +60,10 @@ func (service *MerchantService) GetList() (interface{}, error) {
 	if execute.Error != nil {
 		return nil, execute.Error
 	}
-	return model, nil
+	service.Response.Page = service.Request.Parameter.Page
+	service.Response.Limit = service.Request.Parameter.Limit
+	service.Response.Lists = model
+	return service.Response, nil
 }
 
 func (service *MerchantService) GetOutletList(merchantID int64) (interface{}, error) {
@@ -72,7 +75,10 @@ func (service *MerchantService) GetOutletList(merchantID int64) (interface{}, er
 	if execute.Error != nil {
 		return nil, execute.Error
 	}
-	return model, nil
+	service.Response.Page = service.Request.Parameter.Page
+	service.Response.Limit = service.Request.Parameter.Limit
+	service.Response.Lists = model
+	return service.Response, nil
 }
 
 func (service MerchantService) validate(merchantID int64) error {

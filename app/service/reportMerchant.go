@@ -6,7 +6,6 @@ import (
 	"gorm.io/gorm"
 	"net/http"
 	"strconv"
-	"time"
 )
 
 type ReportMerchantService struct {
@@ -19,16 +18,9 @@ type ReportMerchantService struct {
 		}
 	}
 	Response struct {
-		responseReport
+		pagination
 	}
 	baseService
-}
-
-type responseReport struct {
-	MerchantName string    `json:"merchant_name,omitempty"`
-	OutletName   string    `json:"outlet_name,omitempty"`
-	Omzet        float64   `json:"omzet,omitempty"`
-	Date         time.Time `json:"date,omitempty"`
 }
 
 func InitReportMerchantService(db *gorm.DB, r *http.Request) (service ReportMerchantService, statusCode int, err error) {
@@ -77,7 +69,10 @@ func (service *ReportMerchantService) GetDailyOmzet(merchantID int64) (interface
 	if execute.Error != nil {
 		return nil, execute.Error
 	}
-	return model, nil
+	service.Response.Page = service.Request.Parameter.Page
+	service.Response.Limit = service.Request.Parameter.Limit
+	service.Response.Lists = model
+	return service.Response, nil
 }
 
 func (service ReportMerchantService) validate(merchantID int64) error {

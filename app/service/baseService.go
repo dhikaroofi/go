@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 type baseService struct {
@@ -16,6 +17,19 @@ type baseService struct {
 	User    model.Users
 	JwtData jwt.MapClaims
 	Token   string
+}
+
+type pagination struct {
+	Page  int         `json:"page"`
+	Limit int         `json:"limit"`
+	Lists interface{} `json:"lists,omitempty"`
+}
+
+type responseReport struct {
+	MerchantName string    `json:"merchant_name,omitempty"`
+	OutletName   string    `json:"outlet_name,omitempty"`
+	Omzet        float64   `json:"omzet,omitempty"`
+	Date         time.Time `json:"date,omitempty"`
 }
 
 func (baseService) DecodeJson(r *http.Request, payload interface{}) error {

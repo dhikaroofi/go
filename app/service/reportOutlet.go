@@ -17,7 +17,7 @@ type ReportOutletService struct {
 		}
 	}
 	Response struct {
-		responseReport
+		pagination
 	}
 	baseService
 }
@@ -70,7 +70,10 @@ func (service *ReportOutletService) GetDailyReport(outletID int64) (interface{},
 	if execute.Error != nil {
 		return nil, execute.Error
 	}
-	return model, nil
+	service.Response.Page = service.Request.Parameter.Page
+	service.Response.Limit = service.Request.Parameter.Limit
+	service.Response.Lists = model
+	return service.Response, nil
 }
 
 func (service ReportOutletService) validate(outletid int64) error {
