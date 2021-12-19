@@ -22,15 +22,14 @@ type ReportOutletService struct {
 	baseService
 }
 
-func InitReportOutletService(db *gorm.DB, r *http.Request) (ReportOutletService, error) {
-	service := ReportOutletService{}
+func InitReportOutletService(db *gorm.DB, r *http.Request) (service ReportOutletService, statusCode int, err error) {
 	service.r = r
 	service.db = db
 	service.getQueryParameter()
 	if err := service.DecodeToken(); err != nil {
-		return service, err
+		return service, http.StatusUnauthorized, err
 	}
-	return service, nil
+	return service, http.StatusOK, nil
 }
 
 func (service *ReportOutletService) getQueryParameter() {
@@ -67,7 +66,7 @@ func (service *ReportOutletService) GetDailyReport(outletID int64) (interface{},
 		"INNER JOIN (SELECT Outlets.id,Outlets.merchant_id,Outlets.outlet_name,Merchants.merchant_name "+
 		"				FROM Outlets INNER JOIN Merchants ON Merchants.id=Outlets.merchant_id) ot "+
 		"on ot.id=trx.outlet_id "+
-		"WHERE trx.outlet_id = ? GROUP BY date LIMIT ? OFFSET ?; ", outletID, service.Request.Parameter.Limit, service.Request.Parameter.Offset).Scan(&model)
+		"WHERE trx.outlet_id = ? GROUP BY date   ORDER BY date   LIMIT ? OFFSET ? ", outletID, service.Request.Parameter.Limit, service.Request.Parameter.Offset).Scan(&model)
 	if execute.Error != nil {
 		return nil, execute.Error
 	}

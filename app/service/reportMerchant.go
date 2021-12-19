@@ -31,15 +31,14 @@ type responseReport struct {
 	Date         time.Time `json:"date,omitempty"`
 }
 
-func InitReportMerchantService(db *gorm.DB, r *http.Request) (ReportMerchantService, error) {
-	service := ReportMerchantService{}
+func InitReportMerchantService(db *gorm.DB, r *http.Request) (service ReportMerchantService, statusCode int, err error) {
 	service.r = r
 	service.db = db
 	service.getQueryParameter()
 	if err := service.DecodeToken(); err != nil {
-		return service, err
+		return service, http.StatusUnauthorized, err
 	}
-	return service, nil
+	return service, http.StatusOK, nil
 }
 
 func (service *ReportMerchantService) getQueryParameter() {
@@ -74,7 +73,7 @@ func (service *ReportMerchantService) GetDailyOmzet(merchantID int64) (interface
 		"DATE(trx.created_at) 'date' "+
 		"FROM Transactions trx "+
 		"INNER JOIN Merchants mct on mct.id=trx.merchant_id "+
-		"WHERE trx.merchant_id = ? GROUP BY date LIMIT ? OFFSET ? ", merchantID, service.Request.Parameter.Limit, service.Request.Parameter.Offset).Scan(&model)
+		"WHERE trx.merchant_id = ? GROUP BY date  ORDER BY date  LIMIT ? OFFSET ? ", merchantID, service.Request.Parameter.Limit, service.Request.Parameter.Offset).Scan(&model)
 	if execute.Error != nil {
 		return nil, execute.Error
 	}

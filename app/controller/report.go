@@ -11,9 +11,9 @@ import (
 )
 
 func GetDailyReportMerchant(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
-	getRepo, err := service.InitReportMerchantService(db, r)
+	getRepo, status, err := service.InitReportMerchantService(db, r)
 	if err != nil {
-		helper.RespondError(w, http.StatusBadRequest, err, nil)
+		helper.RespondError(w, status, err, nil)
 		return
 	}
 	vars := mux.Vars(r)
@@ -37,9 +37,9 @@ func GetDailyReportMerchant(db *gorm.DB, w http.ResponseWriter, r *http.Request)
 }
 
 func GetDailyReportOutlet(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
-	getRepo, err := service.InitReportOutletService(db, r)
+	getRepo, status, err := service.InitReportOutletService(db, r)
 	if err != nil {
-		helper.RespondError(w, http.StatusBadRequest, err, nil)
+		helper.RespondError(w, status, err, nil)
 		return
 	}
 	vars := mux.Vars(r)
