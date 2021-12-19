@@ -83,7 +83,6 @@ func (service *MerchantService) GetOutletList(merchantID int64) (interface{}, er
 
 func (service MerchantService) validate(merchantID int64) error {
 	var count int64
-
 	service.db.Model(&model.Merchants{}).Where("id = ? AND user_id = ?", merchantID, service.User.ID).Count(&count)
 	if count < 1 {
 		return errors.New("data tidak dapat diakses")

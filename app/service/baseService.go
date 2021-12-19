@@ -28,7 +28,7 @@ type pagination struct {
 type responseReport struct {
 	MerchantName string    `json:"merchant_name,omitempty"`
 	OutletName   string    `json:"outlet_name,omitempty"`
-	Omzet        float64   `json:"omzet,omitempty"`
+	Omzet        float64   `json:"omzet"`
 	Date         time.Time `json:"date,omitempty"`
 }
 
