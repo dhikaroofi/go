@@ -1,0 +1,120 @@
+{
+	"info": {
+		"_postman_id": "a996f167-9a27-47f5-a180-69a247e9e527",
+		"name": "Auth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "report merchant",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJ1c2VyX2lkIjoxLCJ1c2VyX25hbWUiOiJhZG1pbjEifQ.Xb2So0_DxVXhisvpTdVYyXvKlE4oqaVpEoXvDq7b3-A",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/report/merchant/:id/omzet?page=0&limit=1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"report",
+						"merchant",
+						":id",
+						"omzet"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "limit",
+							"value": "1"
+						},
+						{
+							"key": ":id",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "report outlet",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJ1c2VyX2lkIjoxLCJ1c2VyX25hbWUiOiJhZG1pbjEifQ.Xb2So0_DxVXhisvpTdVYyXvKlE4oqaVpEoXvDq7b3-A",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/report/merchant/:id/omzet?page=0&limit=1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"report",
+						"merchant",
+						":id",
+						"omzet"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "limit",
+							"value": "1"
+						},
+						{
+							"key": ":id",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
